@@ -12,44 +12,7 @@ import os
 import json
 
 def addermulti():
-    g_index = ''
-    print('''You choosed adding members with multiple accounts...
-    Instructions:
-    1 - Login with all different accounts and keep all phonenumber.session in this folder.
-    2 - Copy a .json a file, paste it in the same directory, and rename it to: multiconfig, it will automatically become multiconfig.json
-    3 - Paste the following snippet in the file:
-
-    [
-    {
-      "api_id": "your api id number",
-      "api_hash": "your api hash",
-      "phone": "your phone number"
-    },
-    {
-      "api_id": "your api id number 2",
-      "api_hash": "your api hash 2",
-      "phone": "your phone number 2"
-    }
-    ]
-
-    If you want to add more than accounts, copy and paste this:
-    {
-      "api_id": "your api id number 2",
-      "api_hash": "your api hash 2",
-      "phone": "your phone number 2"
-    }
-
-    ... inside the [    ]. The last { } inside [] can not be followed by a comma. 
-    So The overall structure of the file should be similar to this:
-    [
-    {'account datas': 'values1'},
-
-    {'account datas': 'values2'},
-
-    {'account datas': 'values3'}     <--- Notice there is not a comma here
-    ]
-    ''')
-
+    g_id = ''
     def add_credentials():
 	    if os.path.isfile(os.path.join(os.getcwd(), 'multiconfig.json')) == True:
 	        with open(os.path.join(os.getcwd(), 'multiconfig.json'), 'r') as config_file:
@@ -214,13 +177,15 @@ def addermulti():
             for group in groups:
                 group.title = group.title.encode('utf-8')
                 group.title = group.title.decode('ascii', 'ignore')
-                print(f'{str(i)} - {str(group.title)}')
+                print(f'[Group]: {str(group.title)} [Id]: {str(group.id)}')
                 i += 1
 
-            if g_index == '':
-                g_index = input("Enter a Number: ")
+            if g_id == '':
+                g_id = input("Enter the group Id: ")
 
-            target_group = groups[int(g_index)]
+            for group in groups:
+                if g_id == str(group.id):
+                    target_group = group
 
             #Start of scrappe members from that group to avoid repetition
 
