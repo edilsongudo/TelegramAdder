@@ -12,6 +12,7 @@ import os
 import json
 
 def addermulti():
+    g_scrape_id = ''
     g_id = ''
     def add_credentials():
 	    if os.path.isfile(os.path.join(os.getcwd(), 'multiconfig.json')) == True:
@@ -163,7 +164,6 @@ def addermulti():
 
 
             try:
-                g_scrape_id = ''
                 print('Which Group Do You Want To Scrape Members From: ')
                 i=0
 
