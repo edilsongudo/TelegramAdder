@@ -15,101 +15,101 @@ def addermulti():
     g_scrape_id = ''
     g_id = ''
     def add_credentials():
-	    if os.path.isfile(os.path.join(os.getcwd(), 'multiconfig.json')) == True:
-	        with open(os.path.join(os.getcwd(), 'multiconfig.json'), 'r') as config_file:
-	            data = json.load(config_file)
+        if os.path.isfile(os.path.join(os.getcwd(), 'multiconfig.json')) == True:
+            with open(os.path.join(os.getcwd(), 'multiconfig.json'), 'r') as config_file:
+                data = json.load(config_file)
 
-	            print(f'Credentials found, for {len(data)} Telegram accounts')
-	            for cred in data:
-	                print(f'Checking if two factor authentication is already done with {cred["phone"]}')
-	                client = TelegramClient(cred['phone'], cred['api_id'], cred['api_hash'])
-	                async def main():
-	                    # Now you can use all client methods listed below, like for example...
-	                    await client.send_message('me', 'Hello !!!!!')
+                print(f'Credentials found, for {len(data)} Telegram accounts')
+                for cred in data:
+                    print(f'Checking if two factor authentication is already done with {cred["phone"]}')
+                    client = TelegramClient(cred['phone'], cred['api_id'], cred['api_hash'])
+                    async def main():
+                        # Now you can use all client methods listed below, like for example...
+                        await client.send_message('me', 'Hello !!!!!')
 
-	                with client:
-	                    client.loop.run_until_complete(main())
-	                client.connect()
-	                if not client.is_user_authorized():
-	                    print(f'Sending request code to {cred["phone"]}, please authenticate')
-	                    client.send_code_request(phone)
-	                    client.sign_in(cred["phone"], input('40779'))
-	                else:
-	                    print(f'Good! Client {cred["phone"]} is authenticated, I can use it.')
-	                client.disconnect()
+                    with client:
+                        client.loop.run_until_complete(main())
+                    client.connect()
+                    if not client.is_user_authorized():
+                        print(f'Sending request code to {cred["phone"]}, please authenticate')
+                        client.send_code_request(phone)
+                        client.sign_in(cred["phone"], input('40779'))
+                    else:
+                        print(f'Good! Client {cred["phone"]} is authenticated, I can use it.')
+                    client.disconnect()
 
-	        print(f'Credentials found, for {len(data)} Telegram accounts')
-	        while True:
-	            question = input('Do you want to use these credentials?[y/n] ').lower()
-	            if question == 'y':
-	                break
-	            elif question == 'n':
-	                print('Good, lets define new credentials...')
-	                ammount_of_credentials = int(input('How many accounts do you want to add?'))
-	                credentials = []
-	                for i in range(ammount_of_credentials):
-	                    phone = input('Type the phone number: ')
-	                    api_id = input(f'Type {phone} api id: ')
-	                    api_hash = input(f'Type {phone} api hash: ')
+            print(f'Credentials found, for {len(data)} Telegram accounts')
+            while True:
+                question = input('Do you want to use these credentials?[y/n] ').lower()
+                if question == 'y':
+                    break
+                elif question == 'n':
+                    print('Good, lets define new credentials...')
+                    ammount_of_credentials = int(input('How many accounts do you want to add?'))
+                    credentials = []
+                    for i in range(ammount_of_credentials):
+                        phone = input('Type the phone number: ')
+                        api_id = input(f'Type {phone} api id: ')
+                        api_hash = input(f'Type {phone} api hash: ')
 
-	                    config = {}
-	                    config['api_id'] = api_id
-	                    config['api_hash'] = api_hash
-	                    config['phone'] = phone
-	                    credentials.append(config.copy())
+                        config = {}
+                        config['api_id'] = api_id
+                        config['api_hash'] = api_hash
+                        config['phone'] = phone
+                        credentials.append(config.copy())
 
-	                    with open(os.path.join(os.getcwd(), 'multiconfig.json'), 'w') as config_file:
-	                        json.dump(credentials, config_file, indent=2)
+                        with open(os.path.join(os.getcwd(), 'multiconfig.json'), 'w') as config_file:
+                            json.dump(credentials, config_file, indent=2)
 
-	                    client = TelegramClient(phone, api_id, api_hash)
-	                    async def main():
-	                        # Now you can use all client methods listed below, like for example...
-	                        await client.send_message('me', 'Hello !!!!!')
+                        client = TelegramClient(phone, api_id, api_hash)
+                        async def main():
+                            # Now you can use all client methods listed below, like for example...
+                            await client.send_message('me', 'Hello !!!!!')
 
-	                    with client:
-	                        client.loop.run_until_complete(main())
-	                    client.connect()
-	                    if not client.is_user_authorized():
-	                        print(f'Sending request code to {phone}, please authenticate')
-	                        client.send_code_request(phone)
-	                        client.sign_in(phone, input('40779'))
-	                    else:
-	                        print(f'Good! Client {phone} is authenticated, I can use it.')
-	                    client.disconnect()
-	                break
-	    else:
-	        print('No credentials found. Lets define new ones')
-	        ammount_of_credentials = int(input('How many accounts do you want to add?'))
-	        credentials = []
-	        for i in range(ammount_of_credentials):
-	            phone = input('Type the phone number: ')
-	            api_id = input(f'Type {phone} api id: ')
-	            api_hash = input(f'Type {phone} api hash: ')
+                        with client:
+                            client.loop.run_until_complete(main())
+                        client.connect()
+                        if not client.is_user_authorized():
+                            print(f'Sending request code to {phone}, please authenticate')
+                            client.send_code_request(phone)
+                            client.sign_in(phone, input('40779'))
+                        else:
+                            print(f'Good! Client {phone} is authenticated, I can use it.')
+                        client.disconnect()
+                    break
+        else:
+            print('No credentials found. Lets define new ones')
+            ammount_of_credentials = int(input('How many accounts do you want to add?'))
+            credentials = []
+            for i in range(ammount_of_credentials):
+                phone = input('Type the phone number: ')
+                api_id = input(f'Type {phone} api id: ')
+                api_hash = input(f'Type {phone} api hash: ')
 
-	            config = {}
-	            config['api_id'] = api_id
-	            config['api_hash'] = api_hash
-	            config['phone'] = phone
-	            credentials.append(config.copy())
+                config = {}
+                config['api_id'] = api_id
+                config['api_hash'] = api_hash
+                config['phone'] = phone
+                credentials.append(config.copy())
 
-	            with open(os.path.join(os.getcwd(), 'multiconfig.json'), 'w') as config_file:
-	                json.dump(credentials, config_file, indent=2)
+                with open(os.path.join(os.getcwd(), 'multiconfig.json'), 'w') as config_file:
+                    json.dump(credentials, config_file, indent=2)
 
-	            client = TelegramClient(phone, api_id, api_hash)
-	            async def main():
-	                # Now you can use all client methods listed below, like for example...
-	                await client.send_message('me', 'Hello !!!!!')
+                client = TelegramClient(phone, api_id, api_hash)
+                async def main():
+                    # Now you can use all client methods listed below, like for example...
+                    await client.send_message('me', 'Hello !!!!!')
 
-	            with client:
-	                client.loop.run_until_complete(main())
-	            client.connect()
-	            if not client.is_user_authorized():
-	                print(f'Sending request code to {phone}, please authenticate')
-	                client.send_code_request(phone)
-	                client.sign_in(phone, input('40779'))
-	            else:
-	                print(f'Good! Client {phone} is authenticated, I can use it.')
-	            client.disconnect()
+                with client:
+                    client.loop.run_until_complete(main())
+                client.connect()
+                if not client.is_user_authorized():
+                    print(f'Sending request code to {phone}, please authenticate')
+                    client.send_code_request(phone)
+                    client.sign_in(phone, input('40779'))
+                else:
+                    print(f'Good! Client {phone} is authenticated, I can use it.')
+                client.disconnect()
 
     add_credentials()
 
@@ -284,8 +284,11 @@ def addermulti():
 
             n = 0
 
-            with open(os.path.join(os.getcwd(), 'tried.json'), 'r') as file:
-                tried = json.load(file)
+            try:
+                with open(os.path.join(os.getcwd(), 'tried.json'), 'r') as file:
+                    tried = json.load(file)
+            except:
+                tried = []
 
             for user in users:
                 if AMMOUNT_OF_FLOOD_ERROS > 10:
@@ -297,7 +300,7 @@ def addermulti():
                 if user not in scrapedusers:
                     if user not in tried:
                         tried.append(user.copy())
-                        with open(os.path.join(os.getcwd(), 'tried.json'), 'w') as file:
+                        with open(os.path.join(os.getcwd(), 'tried.json'), 'w+') as file:
                             json.dump(tried, file, indent=2)
                         try:
                             n += 1
@@ -338,11 +341,14 @@ def addermulti():
                                 continue
                             AMMOUNT_OF_USERS_ADDED += 1
 
-                            with open(os.path.join(os.getcwd(), 'added.json'), 'r') as file:
-                                added = json.load(file)
-                                added.append(user.copy())
+                            try:
+                                with open(os.path.join(os.getcwd(), 'added.json'), 'r') as file:
+                                    added = json.load(file)
+                                    added.append(user.copy())
+                            except:
+                                added = []
 
-                            with open(os.path.join(os.getcwd(), 'added.json'), 'w') as file:
+                            with open(os.path.join(os.getcwd(), 'added.json'), 'w+') as file:
                                 json.dump(added, file, indent=2)
                                 try:
                                     print(f'User {user["name"]} with id: {user["id"]} has been sucessfully added to your group.')
