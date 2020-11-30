@@ -140,17 +140,6 @@ def addermulti():
                 client.send_code_request(phone)
                 client.sign_in(phone, input('40779'))
 
-            users = []
-            with open(os.path.join(os.getcwd(), 'Scraped.json'), "r", encoding='utf-8', errors='ignore') as f:
-                list = json.load(f, strict=False)
-                for dict in list:
-                    user = {}
-                    user['username'] = dict['username']
-                    user['id'] = dict['id']
-                    user['access_hash'] = dict['access_hash']
-                    user['name'] = dict['name']
-                    users.append(user)
-
             chats = []
             last_date = None
             chunk_size = 200
@@ -171,6 +160,72 @@ def addermulti():
                         groups.append(chat)
                 except:
                     continue
+
+
+            try:
+                g_scrape_id = ''
+                print('Which Group Do You Want To Scrape Members From: ')
+                i=0
+
+                for g in groups:
+                    g.title = g.title.encode('utf-8')
+                    g.title = g.title.decode('ascii', 'ignore')
+                    print(f'[Group]: {str(g.title)} [Id]: {str(g.id)}')
+                    i+=1
+
+                if g_scrape_id == '':        
+                    g_scrape_id = input("Please! Enter the group to scrape id: ").strip()
+
+                for group in groups:
+                    if str(group.id) == g_scrape_id:      
+                        target_group_scrape = group
+
+                print('Fetching Members...')
+                all_participants_to_scrape = []
+                all_participants_to_scrape = client.get_participants(target_group_scrape, aggressive=True)
+
+                print('Saving In file...')
+
+                with open(os.path.join(os.getcwd(), 'Scraped.json'), 'w+') as f:
+                    users = []
+                    jsonuser = {}
+                    for user in all_participants_to_scrape:
+                        jsonuser.clear()
+                        if user.username:
+                            username= user.username
+                        else:
+                            username= ""
+                        if user.first_name:
+                            first_name= user.first_name
+                        else:
+                            first_name= ""
+                        if user.last_name:
+                            last_name= user.last_name
+                        else:
+                            last_name= ""
+                        name= (first_name + ' ' + last_name).strip()
+                        jsonuser['username'] = username
+                        jsonuser['id'] = user.id
+                        jsonuser['access_hash'] = user.access_hash
+                        jsonuser['name'] = name
+                        users.append(jsonuser.copy())
+                    json.dump(users, f, indent=2)
+
+                print('Members scraped successfully.......')
+
+                users = []
+                with open(os.path.join(os.getcwd(), 'Scraped.json'), "r", encoding='utf-8', errors='ignore') as f:
+                    list = json.load(f, strict=False)
+                    for dict in list:
+                        user = {}
+                        user['username'] = dict['username']
+                        user['id'] = dict['id']
+                        user['access_hash'] = dict['access_hash']
+                        user['name'] = dict['name']
+                        users.append(user)
+
+            except Exception as e:
+                print(e)
 
             print('Choose a group to add members:')
             i = 0
